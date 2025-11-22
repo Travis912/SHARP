@@ -1,0 +1,158 @@
+.endorsements-root{
+  /* adopt the app's dark theme tokens if available, with sensible fallbacks */
+  --endorse-accent: rgba(96,165,250,0.08); /* soft blue highlight */
+  --accent: #60a5fa;
+  --muted: #cdd6e0;
+  --text: #e6eefc;
+  --card-bg: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+
+  display:flex;
+  flex-direction:column;
+  gap:12px;
+  align-items:stretch;
+  padding:12px 8px;
+}
+
+.endorsements-main{
+  display:flex;
+  gap:20px;
+  align-items:flex-start;
+}
+
+.endorsements-header{
+  display:flex;
+  gap:12px;
+  align-items:center;
+  justify-content:flex-start;
+  white-space:nowrap; /* keep header on a single line */
+}
+
+.endorsements-header h1{ margin:0; font-size:2rem; font-weight:700; letter-spacing:0.2px }
+
+.endorsements-modes{ display:flex; gap:8px; align-items:center }
+.mode-btn{
+  background:transparent;
+  border:0;
+  color:var(--text); /* inactive buttons show white text */
+  padding:9px 14px; /* larger click target */
+  border-radius:8px;
+  cursor:pointer;
+  font-weight:700;
+  font-size:1.02rem; /* slightly larger text */
+}
+.mode-btn:focus{ outline:3px solid rgba(96,165,250,0.22); outline-offset:3px }
+.mode-btn.active{ background:var(--endorse-accent); color:var(--accent); box-shadow:0 8px 22px rgba(2,6,23,0.08) }
+
+/* Slightly increase spacing between header and content */
+.endorsements-main{ gap:22px }
+
+.endorsements-left{
+  /* wider, responsive column so titles fit on one line on most viewports */
+  width: clamp(480px, 40vw, 900px);
+  max-width:55%;
+  display:flex;
+  flex-direction:column;
+  gap:8px;
+}
+
+.endorsement-item{
+  padding:10px 12px;
+  border-radius:6px;
+  cursor:pointer;
+  transition: background-color 260ms cubic-bezier(.2,.9,.2,1), color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
+  background:transparent;
+  color:var(--text);
+}
+
+.endorsement-item strong{font-weight:700; font-size:1.08rem}
+
+.endorsement-item:hover,
+.endorsement-item:focus,
+.endorsement-item.active{
+  background:var(--endorse-accent);
+  transform:translateX(6px);
+  color:var(--text);
+  box-shadow: 0 6px 18px rgba(2,6,23,0.18);
+}
+
+.endorsements-right{
+  flex:1 1 auto;
+  min-height:120px; /* reserve space to avoid layout shift */
+  display:flex;
+  align-items:flex-start;
+}
+
+/* Prevent wrapping of title text on the left; truncate with ellipsis */
+.endorsements-left{ min-width:0 }
+.endorsement-item{ min-width:0 }
+.endorsement-item strong{
+  display:block;
+  white-space:nowrap; /* keep title on a single line */
+  overflow:visible;
+  text-overflow:unset;
+  font-size:0.95rem; /* slightly smaller so longer titles fit */
+  letter-spacing:0.4px; /* more airy letters */
+}
+
+.endorsement-desc-card{
+  background:var(--card-bg);
+  border-radius:8px;
+  padding:14px 16px;
+  box-shadow:0 8px 30px rgba(0,0,0,0.5);
+  max-width:72ch;
+  color:var(--text);
+  min-width:260px;
+  min-height:110px;
+  display:flex;
+  align-items:flex-start;
+  justify-content:flex-start;
+  overflow:hidden;
+  /* start hidden */
+  opacity:0;
+  transform: translateY(10px) scale(0.992);
+  transition: opacity 900ms cubic-bezier(.22,.8,.2,1), transform 900ms cubic-bezier(.22,.8,.2,1);
+  will-change: opacity, transform;
+}
+
+/* visible state: smooth fade/slide/scale in */
+.endorsement-desc-card.visible{
+  opacity:1;
+  transform: translateY(0) scale(1);
+}
+
+/* animate the inner content slightly for improved smoothness */
+.endorsement-desc-inner{ opacity:0; transform: translateY(8px); transition: opacity 1000ms ease, transform 1000ms ease }
+.endorsement-desc-card.visible .endorsement-desc-inner{ opacity:1; transform: translateY(0) }
+
+/* Fade/slide for text elements with a slight stagger */
+.endorsement-desc-inner h3,
+.endorsement-desc-inner p {
+  opacity:0;
+  transform: translateY(6px);
+  transition: opacity 900ms cubic-bezier(.22,.8,.2,1), transform 900ms cubic-bezier(.22,.8,.2,1);
+}
+.endorsement-desc-card.visible .endorsement-desc-inner h3{
+  opacity:1;
+  transform: translateY(0);
+  transition-delay: 200ms;
+}
+.endorsement-desc-card.visible .endorsement-desc-inner p{
+  opacity:1;
+  transform: translateY(0);
+  transition-delay: 500ms;
+}
+
+.endorsement-desc-card h3{margin:0 0 8px 0; font-size:18px}
+.endorsement-desc-card p{margin:0; color:var(--muted); line-height:1.45; letter-spacing:0.25px; font-size:1rem}
+
+.endorsement-placeholder{color:var(--muted); font-style:italic}
+
+@media (max-width:900px){
+  .endorsements-root{flex-direction:column}
+  .endorsements-left{width:100%; flex-direction:row; flex-wrap:wrap}
+  .endorsement-item{flex:1 1 auto}
+  /* On small screens allow titles to wrap for readability */
+  .endorsement-item strong{ white-space:normal; font-size:1.02rem }
+  .endorsements-header h1{ font-size:1.12rem }
+  .mode-btn{ padding:8px 10px; font-size:0.98rem }
+}

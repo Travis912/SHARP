@@ -1,0 +1,75 @@
+:root{
+  --bg: #0f1720;
+  --muted: #9aa4b2;
+  --accent: #60a5fa;
+}
+.sidebar{
+  position:fixed;
+  left:0;
+  top:0;
+  bottom:0;
+  width: max-content; /* auto-size to nav content */
+  min-width:140px; /* avoid becoming too narrow */
+  padding:20px 12px;
+  background: linear-gradient(180deg, rgba(10,14,20,0.98), rgba(6,10,14,0.96));
+  box-shadow: 2px 0 8px rgba(0,0,0,0.4);
+  display:flex;
+  align-items:flex-start;
+  box-sizing:border-box;
+  z-index:1000;
+}
+.sidebar ul{ list-style:none; padding:0; margin:0; width:auto; }
+.sidebar li{ margin:8px 0; }
+.sidebar a{
+  display:block;
+  padding:10px 12px;
+  color:var(--muted);
+  text-decoration:none;
+  border-radius:8px;
+  font-weight:500;
+}
+.sidebar a:hover{ color:var(--accent); background:rgba(255,255,255,0.02); }
+.sidebar a.active{ color:#fff; background:linear-gradient(90deg, rgba(96,165,250,0.12), rgba(96,165,250,0.06)); box-shadow: inset 0 0 0 1px rgba(96,165,250,0.06); }
+
+.dropdown{ list-style:none; margin:6px 0 0 8px; padding:0; }
+.dropdown{
+  list-style:none;
+  margin:6px 0 0 8px;
+  padding:0;
+  opacity:0;
+  transform:translateY(-6px);
+  max-height:0;
+  overflow:hidden;
+  transition: opacity 180ms ease, transform 180ms ease, max-height 180ms ease;
+  pointer-events:none;
+  will-change:opacity,transform,max-height;
+}
+.dropdown.open{
+  opacity:1;
+  transform:translateY(0);
+  max-height:480px;
+  pointer-events:auto;
+}
+.dropdown li{ margin:6px 0 }
+.dropdown a{ display:block; padding:8px 10px; color:var(--muted); font-size:0.95rem; border-radius:6px }
+.dropdown a:hover{ color:var(--accent); background:rgba(255,255,255,0.02) }
+.dropdown a.active{ color:#fff; background:linear-gradient(90deg, rgba(96,165,250,0.16), rgba(96,165,250,0.06)); }
+
+@media (max-width: 768px){
+  /* Keep the sidebar a fixed, narrow column on small screens and prevent horizontal growth.
+     Make the inner list vertically scrollable if it overflows. */
+  .sidebar{
+    position:fixed;
+    left:0;
+    top:0;
+    bottom:0;
+    width: var(--sidebar-width,140px);
+    max-width: var(--sidebar-width,140px);
+    padding:10px;
+    overflow: hidden;
+  }
+
+  /* Stack items vertically and allow the list itself to scroll vertically */
+  .sidebar ul{ display:block; max-height:100vh; overflow-y:auto; padding:0; margin:0 }
+  .sidebar li{ margin:8px 0 }
+}

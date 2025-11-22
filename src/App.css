@@ -1,0 +1,295 @@
+:root {
+  color: #e1e1e1;
+  background-color: #121212;
+}
+
+body{ margin:0 }
+
+html{
+  scroll-behavior:smooth;
+}
+
+/* Layout */
+.app-layout{ display:flex; min-height:100vh; }
+.sidebar + .content, .content{ margin-left:var(--sidebar-width,140px); flex:1; }
+.content{ padding:0 1.5vw 12px 1.5vw; box-sizing:border-box; }
+
+.page-section{ min-height:100vh; padding:36px 24px; display:flex; align-items:center; }
+.section-inner{ max-width:900px; }
+.activity-section{ /* allow section to grow with content instead of fixed viewport height */ padding:2vh 0 2px 0; display:flex; align-items:flex-start; }
+.activity-inner{ max-width:none; width:100%; }
+.page-section:nth-child(odd){ background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); }
+.page-section h1{ margin:0 0 12px 0; font-size:clamp(28px,4vw,40px); }
+.page-section p{ color:#cdd6e0; line-height:1.6 }
+
+.activity-section:nth-child(odd){ background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); }
+.activity-section p{ color:#cdd6e0; line-height:1.6 }
+
+.quotes-section{ min-height:100vh; padding:36px 24px; display:flex; align-items:center; }
+.quotes-inner{ max-width:900px; }
+.quotes-section:nth-child(odd){ background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); }
+.quotes-section h1{ margin:0 0 12px 0; font-size:clamp(28px,4vw,40px); }
+.quotes-section p{ color:#cdd6e0; line-height:1.6 }
+
+.docs-section{ min-height:100vh; padding:12px 24px; display:flex; align-items:flex-start; }
+.docs-inner{ max-width:900px; }
+.docs-section:nth-child(odd){ background: linear-gradient(180deg, rgba(255,255,255,0.01), transparent); }
+.docs-section h1{ margin:0 0 12px 0; font-size:clamp(28px,4vw,40px); }
+.docs-section p{ color:#cdd6e0; line-height:1.6 }
+
+/* Activity notes cards layout */
+.activity-cards{
+  display:flex;
+  flex-direction:row;
+  gap:12px;
+  margin-top:12px;
+  align-items:stretch;
+  overflow-x:hidden; /* hide horizontal scrollbar by ensuring cards shrink/wrap to fit */
+  flex-wrap:wrap; /* allow cards to wrap instead of overflowing */
+  padding-bottom:6px;
+  width:100%;
+}
+.note-card{
+  /* flexible cards that grow to fill available space */
+  flex: 1 1 0%;
+  min-width:0; /* allow content to shrink to avoid horizontal overflow */
+  max-width:none;
+  height: auto; /* allow card to grow with content */
+  min-height: 0; /* allow cards to grow/shrink to fit content */
+  background: linear-gradient(180deg, rgba(255,255,255,0.02), rgba(255,255,255,0.01));
+  border-radius:12px;
+  padding:12px;
+  box-shadow: 0 6px 26px rgba(0,0,0,0.55);
+  display:flex;
+  flex-direction:column;
+  box-sizing:border-box;
+  position:relative;
+  /* allow the card to expand vertically when its content grows */
+  overflow: visible;
+}
+
+/* Give cards 1 & 3 more growth so they appear wider than 2 & 4 */
+.activity-cards > .note-card:nth-child(1),
+.activity-cards > .note-card:nth-child(3) {
+  flex: 2 1 0%;
+}
+.activity-cards > .note-card:nth-child(2),
+.activity-cards > .note-card:nth-child(4) {
+  flex: 1 1 0%;
+}
+
+/* Ensure header controls can shrink and don't force card width */
+.card-header{ display:flex; align-items:center; justify-content:space-between; gap:8px; font-weight:600; color:#e6eefc }
+.card-header .custom-select{ flex:1; min-width:0 }
+.card-header .custom-select-button{ width:100%; min-width:0 }
+.card-body.animate{
+  animation: cardFadeSlide 360ms ease both;
+}
+
+@keyframes cardFadeSlide{
+  0%{ opacity:0; transform: translateY(8px) scale(0.995) }
+  60%{ opacity:1; transform: translateY(-4px) scale(1.002) }
+  100%{ opacity:1; transform: translateY(0) scale(1) }
+}
+.card-header{ display:flex; align-items:center; justify-content:space-between; gap:8px; font-weight:600; color:#e6eefc }
+.card-header label{ font-weight:500; font-size:0.9rem; color:var(--muted); display:inline-block; width: var(--form-label-width, auto); min-width:0 }
+
+/* Nudge the dropdown button in the card header slightly left for tighter alignment */
+.card-header .custom-select-button,
+.card-header .custom-select-button.open {
+  transform: translateX(-6px);
+}
+
+.card-copy-btn{
+  /* position the copy button over the left/top padding so it overlays the (now-blank) option label */
+  position:absolute;
+  top:12px;
+  left:12px;
+  z-index:40;
+  padding:6px 8px;
+  border-radius:6px;
+  border:1px solid rgba(255,255,255,0.04);
+  background: linear-gradient(180deg, rgba(20,24,28,0.95), rgba(12,16,20,0.95));
+  color:var(--muted);
+  font-size:0.85rem;
+  cursor:pointer;
+  display:inline-flex;
+  align-items:center;
+  justify-content:center;
+  box-sizing:border-box;
+  /* fixed width prevents header reflow when label changes */
+  width:64px;
+  min-width:64px;
+  white-space:nowrap;
+}
+.card-copy-btn:hover{ color:var(--accent); }
+.card-copy-btn.copied{ color:#fff; background:linear-gradient(90deg, rgba(96,165,250,0.12), rgba(96,165,250,0.06)); box-shadow: inset 0 0 0 1px rgba(96,165,250,0.06); }
+.card-header select{
+  -webkit-appearance: none;
+  appearance: none;
+  background: linear-gradient(180deg, rgba(10,14,20,0.95), rgba(6,10,14,0.95));
+  color:var(--muted);
+  border:1px solid rgba(255,255,255,0.04);
+  padding:6px 28px 6px 8px;
+  border-radius:6px;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%239aa4b2' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'><polyline points='6 9 12 15 18 9'/></svg>");
+  background-repeat: no-repeat;
+  background-position: right 8px center;
+}
+.card-header select:focus{
+  outline: none;
+  color: #fff;
+  background: linear-gradient(90deg, rgba(96,165,250,0.12), rgba(96,165,250,0.06));
+  box-shadow: inset 0 0 0 1px rgba(96,165,250,0.06);
+}
+
+/* Custom select (replacement for native selects) */
+.custom-select{ position:relative; display:inline-block; }
+.custom-select-button{ display:flex; align-items:center; gap:8px; justify-content:space-between; min-width:180px; padding:8px 12px; border-radius:8px; border:1px solid rgba(255,255,255,0.04); background: linear-gradient(180deg, rgba(10,14,20,0.95), rgba(6,10,14,0.95)); color:var(--muted); }
+.custom-select-button.open{ color:#fff; background:linear-gradient(90deg, rgba(96,165,250,0.12), rgba(96,165,250,0.06)); box-shadow: inset 0 0 0 1px rgba(96,165,250,0.06); }
+.custom-select-chevron{ opacity:0.9 }
+.custom-select-list-wrap{ position:absolute; top:calc(100% + 8px); right:0; z-index:1200; min-width:0 }
+.custom-select-list{ background: linear-gradient(180deg, rgba(10,14,20,0.98), rgba(6,10,14,0.96)); border-radius:10px; padding:6px; box-shadow: 0 8px 30px rgba(0,0,0,0.5); list-style:none; margin:0; max-height:320px; overflow-y:auto; -webkit-overflow-scrolling:touch; width:100% }
+.custom-select-list li { margin:0; padding:0 }
+
+/* fade overlays to indicate scrollable content */
+/* fades removed per user request */
+
+/* scrollbar styling for the dropdown list */
+.custom-select-list::-webkit-scrollbar{ width:10px }
+.custom-select-list::-webkit-scrollbar-track{ background:transparent }
+.custom-select-list::-webkit-scrollbar-thumb{ background: linear-gradient(180deg, rgba(255,255,255,0.03), rgba(255,255,255,0.02)); border-radius:8px; border:2px solid transparent; background-clip: padding-box }
+.custom-select-list::-webkit-scrollbar-thumb:hover{ background: linear-gradient(180deg, rgba(255,255,255,0.05), rgba(255,255,255,0.03)) }
+.custom-select-item{ width:100%; text-align:left; padding:8px 10px; background: linear-gradient(180deg, rgba(10,14,20,0.98), rgba(6,10,14,0.96)); color:var(--muted); border-radius:8px; border:none; }
+.custom-select-item:hover{ background: linear-gradient(180deg, rgba(14,18,22,0.98), rgba(8,12,16,0.96)); color:var(--accent); }
+.custom-select-item.active{ background:linear-gradient(90deg, rgba(96,165,250,0.16), rgba(96,165,250,0.08)); color:#fff }
+
+.card-body{ margin-top:6px; color:#cdd6e0; font-size:0.95rem; line-height:1.5; display:flex; flex-direction:column; overflow:visible; }
+
+/* Activity form styles */
+.activity-form{
+  display:grid;
+  /* allow the input column to shrink below its content width when needed */
+  grid-template-columns: max-content minmax(0,1fr);
+  column-gap:12px;
+  row-gap:10px;
+  /* allow the form to grow naturally with its content */
+  min-height:0;
+  height:auto;
+}
+
+/* When the form sits inside .card-body, let it take available vertical space */
+.card-body{
+  margin-top:12px; color:#cdd6e0; font-size:0.95rem; line-height:1.5; display:flex; flex-direction:column; overflow:visible;
+}
+.card-body > .activity-form{ flex:1 1 auto; overflow: visible; padding-right:6px; box-sizing:border-box; height:auto; min-height:0; margin-top:0 }
+.form-row{ display:contents }
+.form-label{ font-size:0.9rem; font-weight:600; color:var(--muted); white-space:nowrap; margin:0 }
+.form-input{ padding:8px 10px; border-radius:8px; border:1px solid rgba(255,255,255,0.04); background: linear-gradient(180deg, rgba(10,14,20,0.95), rgba(6,10,14,0.95)); color:#e6eefc; min-width:0; width:100%; box-sizing:border-box }
+.form-textarea{ padding:8px 10px; border-radius:8px; border:1px solid rgba(255,255,255,0.04); background: linear-gradient(180deg, rgba(10,14,20,0.95), rgba(6,10,14,0.95)); color:#e6eefc; min-height:120px; resize:vertical; min-width:0; width:100%; box-sizing:border-box }
+
+/* Make focused/active form inputs visually match the nav/selection styling */
+.form-input:focus,
+.form-textarea:focus,
+.form-input[aria-expanded='true'] {
+  outline: none;
+  color: #fff;
+  background: linear-gradient(90deg, rgba(96,165,250,0.12), rgba(96,165,250,0.06));
+  box-shadow: inset 0 0 0 1px rgba(96,165,250,0.06);
+}
+
+/* Make the native datepicker/calendar icon visually white where possible */
+.form-input[type="date"]::-webkit-calendar-picker-indicator {
+  -webkit-filter: invert(1) brightness(1) contrast(1);
+  filter: invert(1) brightness(1) contrast(1);
+}
+
+/* For browsers that render a native icon overlay, ensure the input text/icon contrast is high */
+.form-input[type="date"]{
+  color: #fff;
+}
+
+/* DatePicker custom styles */
+.date-picker-button{
+  display:flex; align-items:center; justify-content:space-between; gap:8px; padding:8px 10px; border-radius:8px; border:1px solid rgba(255,255,255,0.04); background: linear-gradient(180deg, rgba(10,14,20,0.95), rgba(6,10,14,0.95)); color:#e6eefc; min-width:0; width:100%; box-sizing:border-box; cursor:pointer
+}
+.date-picker-button .date-picker-value{ opacity:0.95 }
+.date-picker-button .date-picker-icon{ opacity:0.9 }
+.date-picker-popover{ min-width:260px; background: linear-gradient(180deg, rgba(10,14,20,0.98), rgba(6,10,14,0.96)); border-radius:10px; padding:10px; box-shadow: 0 8px 30px rgba(0,0,0,0.5); }
+.date-picker-header{ display:flex; align-items:center; justify-content:space-between; gap:8px; color:var(--muted); margin-bottom:8px }
+.date-picker-nav{ background:transparent; border:none; color:var(--muted); padding:6px; border-radius:6px; cursor:pointer }
+.date-picker-month{ font-weight:600; color:#e6eefc }
+.date-picker-calendar{ width:100%; border-collapse:collapse; }
+.date-picker-calendar th{ color:var(--muted); font-weight:600; padding:6px; font-size:0.8rem; }
+.date-picker-day{ width:36px; height:36px; border-radius:6px; border:none; background:transparent; color:#e6eefc; cursor:pointer }
+.date-picker-day.muted{ opacity:0.32 }
+.date-picker-day:hover{ background: linear-gradient(180deg, rgba(14,18,22,0.98), rgba(8,12,16,0.96)); color:var(--accent) }
+.date-picker-day.selected{ background:linear-gradient(90deg, rgba(96,165,250,0.16), rgba(96,165,250,0.08)); color:#fff }
+
+/* Make sure popover doesn't push layout — position it fully within viewport when possible */
+.date-picker-popover{ box-sizing: border-box; }
+.date-picker-wrapper{ width:100% }
+
+/* Make the custom button match focus styles used elsewhere */
+.date-picker-button:focus, .date-picker-button.open{ outline:none; color:#fff; background: linear-gradient(90deg, rgba(96,165,250,0.12), rgba(96,165,250,0.06)); box-shadow: inset 0 0 0 1px rgba(96,165,250,0.06) }
+
+@media (max-width:640px){
+  .activity-form{ display:block }
+  .form-row{ display:flex; flex-direction:column; gap:6px }
+  .form-label{ width:auto; margin-bottom:4px }
+}
+
+@media (max-width:1200px){
+  /* on medium screens show two cards per row */
+  .activity-cards{ flex-wrap:wrap; gap:14px }
+  .note-card{ flex: 1 1 calc(50% - 10px); max-width:48%; height: auto; min-height: 0; padding:12px }
+}
+
+@media (max-width:900px){
+  /* on small screens stack cards vertically */
+  .activity-cards{ gap:12px; flex-wrap:wrap }
+  .note-card{ flex: 1 1 100%; max-width:100%; height: auto; min-height: 0 }
+}
+
+@media (max-width:768px){
+  .sidebar + .content, .content{ margin-left:0; padding-top:0 }
+}
+
+/* Activity toggle button styling */
+.activity-controls{ display:flex; justify-content:flex-end; gap:8px; margin-bottom:8px }
+.activity-controls .card-toggle-btn{
+  padding:8px 12px;
+  border-radius:8px;
+  border:1px solid rgba(255,255,255,0.04);
+  background: linear-gradient(180deg, rgba(20,24,28,0.95), rgba(12,16,20,0.95));
+  color:var(--muted);
+  cursor:pointer;
+  font-weight:600;
+  transition: all 160ms ease;
+}
+.activity-controls .card-toggle-btn:hover{ color:var(--accent) }
+/* Ensure the same hover effect applies when the button is in the .open state */
+.activity-controls .card-toggle-btn.open:hover{ color:var(--accent) }
+.activity-controls .card-toggle-btn.open{
+  /* Match the default button appearance so active/inactive look the same */
+  color: var(--muted);
+  background: linear-gradient(180deg, rgba(20,24,28,0.95), rgba(12,16,20,0.95));
+  border: 1px solid rgba(255,255,255,0.04);
+  box-shadow: none;
+}
+
+/* When only two cards are shown, make them equal width (50/50) */
+.activity-cards.only-two > .note-card{
+  flex: 1 1 0% !important;
+  max-width: none;
+}
+
+@media (max-width:1200px){
+  /* Ensure two-card behavior still stacks to two-per-row on medium screens */
+  .activity-cards.only-two > .note-card{ flex-basis: calc(50% - 10px); max-width:48%; }
+}
+
+/* Toggle icon sizing & spacing */
+.card-toggle-icon{ width:16px; height:16px; display:inline-block; vertical-align:middle; margin-right:8px; flex-shrink:0 }
+.card-toggle-btn span{ vertical-align:middle }
+
