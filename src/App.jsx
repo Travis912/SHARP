@@ -27,7 +27,7 @@ function App() {
             {docsView === 'endorsements' ? (
               <Endorsements />
             ) : (
-              <h1>Docs</h1>
+              <h1>Docsss</h1>
             )}
             {docsView === 'setup' && (
               <p>Setup instructions: how to get started, prerequisites, and installation steps.</p>
